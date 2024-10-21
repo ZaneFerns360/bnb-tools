@@ -3,10 +3,15 @@ import { LatestPost } from "~/app/_components/post";
 import { getServerAuthSession } from "~/server/auth";
 import { getUserDetails } from "./api/userDetails";
 import { HydrateClient } from "~/trpc/server";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await getServerAuthSession();
   const userDetails = session ? await getUserDetails() : null;
+
+  if (userDetails?.userClass === "admin") {
+    redirect("/admin");
+  }
 
   return (
     <HydrateClient>
