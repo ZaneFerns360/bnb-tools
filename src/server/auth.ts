@@ -6,9 +6,10 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
-
+import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { checkUserDetails } from "~/app/api/authCheck";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -42,17 +43,53 @@ export const authOptions: NextAuthOptions = {
       ...session,
       user: {
         ...session.user,
-        id: user.id,
+        //  id: user.id,
       },
     }),
   },
-  adapter: PrismaAdapter(db) as Adapter,
+  // adapter: PrismaAdapter(db) as Adapter,
   providers: [
-    DiscordProvider({
+    /*   DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
-    /**
+    }), */
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: {
+          label: "Username",
+          type: "text",
+          placeholder: "Sexy-Shaun",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Bhavde-123",
+        },
+      },
+      async authorize(credentials) {
+        if (!credentials?.username || !credentials?.password) {
+          return null;
+        }
+        console.log(credentials);
+
+        console.log("I am here");
+        const user = await checkUserDetails(
+          credentials.username,
+          credentials.password,
+        );
+
+        if (user) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: "zane.ferns@gmail.com",
+          };
+        }
+
+        return null; // Return null if user not found, shows error message
+      },
+    }) /**
      * ...add more providers here.
      *
      * Most other providers require a bit more work than the Discord provider. For example, the
@@ -60,7 +97,7 @@ export const authOptions: NextAuthOptions = {
      * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
      *
      * @see https://next-auth.js.org/providers/github
-     */
+     */,
   ],
 };
 

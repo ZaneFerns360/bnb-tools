@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Page = () => {
   const [teamId, setTeamId] = useState("");
@@ -44,6 +45,13 @@ const Page = () => {
           Go to Admin
         </button>
       </form>
+
+      <Link
+        href={"/api/auth/signout"}
+        className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+      >
+        Sign Out
+      </Link>
     </div>
   );
 };

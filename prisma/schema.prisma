@@ -32,6 +32,12 @@ model Score {
     team  Team?
 }
 
+model Council {
+    id       String @id @default(uuid())
+    name     String
+    password String
+}
+
 model Team {
     id      String  @id @default(uuid())
     name    String

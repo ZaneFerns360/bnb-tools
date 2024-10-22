@@ -4,14 +4,10 @@ import { getServerAuthSession } from "~/server/auth";
 import { getUserDetails } from "./api/userDetails";
 import { HydrateClient } from "~/trpc/server";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
 export default async function Home() {
   const session = await getServerAuthSession();
-  const userDetails = session ? await getUserDetails() : null;
-
-  if (userDetails?.userClass === "admin") {
-    redirect("/admin");
-  }
 
   return (
     <HydrateClient>
@@ -20,16 +16,6 @@ export default async function Home() {
           <p className="text-center text-2xl text-white">
             {session && <span>Logged in as {session.user?.name}</span>}
           </p>
-
-          {userDetails && (
-            <p className="text-center text-2xl text-white">
-              {userDetails.userClass ? (
-                <span>Class: {userDetails.userClass}</span>
-              ) : (
-                <span>Class: not assigned</span>
-              )}
-            </p>
-          )}
 
           <Link
             href={session ? "/api/auth/signout" : "/api/auth/signin"}
