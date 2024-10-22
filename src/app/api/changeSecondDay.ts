@@ -3,8 +3,8 @@ import { db } from "~/server/db";
 import type * as client from "@prisma/client"; // Import Prisma to use InputJsonValue
 
 export async function changeDay1(
-  newVal: client.Prisma.InputJsonValue, // Use Prisma's InputJsonValue type
   teamId: string,
+  newVal: client.Prisma.InputJsonValue, // Use Prisma's InputJsonValue type
 ): Promise<{ day2: client.Prisma.JsonValue } | null> {
   try {
     const updatedTeam = await db.team.update({
