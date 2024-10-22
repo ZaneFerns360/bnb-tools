@@ -1,10 +1,10 @@
 import { getTeamDetails } from "~/app/api/teamDetails";
 import { Coffee } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import Link from "next/link";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const teamDetails = await getTeamDetails(params.id);
-
   if (!teamDetails) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -50,13 +50,12 @@ export default async function Page({ params }: { params: { id: string } }) {
           />
         </div>
         <div className="mt-6">
-          <Button
-            variant="primary"
-            className="flex items-center justify-center"
-          >
-            <Coffee className="mr-2" />
-            Food
-          </Button>
+          <Link href={`/admin/food/${teamDetails.id}`}>
+            <>
+              <Coffee className="mr-2" />
+              Food
+            </>
+          </Link>
         </div>
       </div>
     </div>

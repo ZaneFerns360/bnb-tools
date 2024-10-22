@@ -44,19 +44,6 @@ model Score {
     demonstration   Int
 }
 
-model Food {
-    id         String @id @default(uuid())
-    team       Team?
-    breakfast1 Int    @default(0)
-    lunch1     Int    @default(0)
-    snack1     Int    @default(0)
-    dinner1    Int    @default(0)
-
-    breakfast2 Int @default(0)
-    lunch2     Int @default(0)
-    snack2     Int @default(0)
-}
-
 model Team {
     id      String  @id @default(uuid())
     name    String
@@ -68,8 +55,8 @@ model Team {
     domain  String?
     score   Score?  @relation(fields: [scoreId], references: [id])
     scoreId String? @unique
-    food    Food?   @relation(fields: [foodId], references: [id])
-    foodId  String? @unique
+    day1    Json?
+    day2    Json?
 }
 
 // Necessary for Next auth
