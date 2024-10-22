@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import QRScanner from "../_components/qrScanner";
 
 const Page = () => {
   const [teamId, setTeamId] = useState("");
@@ -44,6 +45,7 @@ const Page = () => {
         >
           Go to Admin
         </button>
+        <QRScanner />
       </form>
 
       <Link
