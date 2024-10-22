@@ -18,16 +18,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="p-4">
-      <FoodCheckin teamDetails={teamDetails} foodDetails={teamDetails.food} />
-    </div>
-  );
-}
-
-function DetailRow({ label, value }: { label: string; value: string | null }) {
-  return (
-    <div className="flex justify-between text-gray-300">
-      <span className="font-semibold">{label}</span>
-      <span className="text-gray-400">{value}</span>
+      <FoodCheckin teamDetails={teamDetails} />
     </div>
   );
 }

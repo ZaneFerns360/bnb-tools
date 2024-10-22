@@ -1,6 +1,7 @@
 "use server";
 import { db } from "~/server/db";
 import { Team } from "@prisma/client";
+import { JSONValue } from "node_modules/superjson/dist/types";
 
 type TeamDetails = {
   id: string;
@@ -11,6 +12,8 @@ type TeamDetails = {
   member4: string | null;
   domain: string | null;
   scoreId: string | null;
+  day1: JSONValue | null;
+  day2: JSONValue | null;
 };
 
 export async function getTeamDetails(id: string): Promise<TeamDetails | null> {
@@ -29,6 +32,8 @@ export async function getTeamDetails(id: string): Promise<TeamDetails | null> {
         member4: team.member4,
         domain: team.domain,
         scoreId: team.scoreId,
+        day1: team.day1,
+        day2: team.day2,
       };
     } else {
       console.error("Team not found.");

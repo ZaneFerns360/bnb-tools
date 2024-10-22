@@ -1,10 +1,25 @@
-import { motion } from 'framer-motion';
-import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
-import { useState, FormEvent } from 'react';
-import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from '~/components/ui/select';
-import { Users, Palette, Settings, Lightbulb, Rocket, Smartphone, Expand, CheckSquare } from 'lucide-react'; // Lucide Icons
+import { motion } from "framer-motion";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { useState, FormEvent } from "react";
+import {
+  Select,
+  SelectItem,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import {
+  Users,
+  Palette,
+  Settings,
+  Lightbulb,
+  Rocket,
+  Smartphone,
+  Expand,
+  CheckSquare,
+} from "lucide-react"; // Lucide Icons
 
 interface Rating {
   design: string;
@@ -17,15 +32,15 @@ interface Rating {
 }
 
 const TeamEvaluationForm: React.FC = () => {
-  const [teamName, setTeamName] = useState<string>('');
+  const [teamName, setTeamName] = useState<string>("");
   const [ratings, setRatings] = useState<Rating>({
-    design: '',
-    functionality: '',
-    innovation: '',
-    feasibility: '',
-    userExperience: '',
-    scalability: '',
-    demonstration: '',
+    design: "",
+    functionality: "",
+    innovation: "",
+    feasibility: "",
+    userExperience: "",
+    scalability: "",
+    demonstration: "",
   });
 
   const handleRatingChange = (category: keyof Rating, value: string) => {
@@ -46,22 +61,24 @@ const TeamEvaluationForm: React.FC = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="bg-gray-900 p-8 rounded-lg scale-90 shadow-xl max-w-lg mx-auto"
+      className="mx-auto w-full max-w-md scale-90 rounded-lg bg-gray-900 p-8 shadow-xl"
     >
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-100">
+      <h2 className="mb-6 text-center text-2xl font-bold text-gray-100">
         Team Evaluation Formx
       </h2>
       <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Team Name */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="team-name" className="text-gray-300">Team Name</Label>
+          <Label htmlFor="team-name" className="text-gray-300">
+            Team Name
+          </Label>
           <div className="flex items-center space-x-2">
-            <Users className="w-5 h-5 text-gray-400" />
+            <Users className="h-5 w-5 text-gray-400" />
             <Input
               type="text"
               id="team-name"
               placeholder="Enter team name"
-              className="p-2 border rounded-lg w-full bg-gray-800 border-gray-700 text-gray-300"
+              className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300"
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
             />
@@ -70,11 +87,15 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* Design Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="design" className="text-gray-300">Design</Label>
+          <Label htmlFor="design" className="text-gray-300">
+            Design
+          </Label>
           <div className="flex items-center space-x-2">
-            <Palette className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('design', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <Palette className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) => handleRatingChange("design", value)}
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate design (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -90,11 +111,17 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* Functionality Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="functionality" className="text-gray-300">Functionality</Label>
+          <Label htmlFor="functionality" className="text-gray-300">
+            Functionality
+          </Label>
           <div className="flex items-center space-x-2">
-            <Settings className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('functionality', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <Settings className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) =>
+                handleRatingChange("functionality", value)
+              }
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate functionality (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -110,11 +137,15 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* Innovation Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="innovation" className="text-gray-300">Innovation</Label>
+          <Label htmlFor="innovation" className="text-gray-300">
+            Innovation
+          </Label>
           <div className="flex items-center space-x-2">
-            <Lightbulb className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('innovation', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <Lightbulb className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) => handleRatingChange("innovation", value)}
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate innovation (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -130,11 +161,17 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* Feasibility Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="feasibility" className="text-gray-300">Feasibility</Label>
+          <Label htmlFor="feasibility" className="text-gray-300">
+            Feasibility
+          </Label>
           <div className="flex items-center space-x-2">
-            <Rocket className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('feasibility', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <Rocket className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) =>
+                handleRatingChange("feasibility", value)
+              }
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate feasibility (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -150,11 +187,17 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* User Experience Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="user-experience" className="text-gray-300">User Experience</Label>
+          <Label htmlFor="user-experience" className="text-gray-300">
+            User Experience
+          </Label>
           <div className="flex items-center space-x-2">
-            <Smartphone className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('userExperience', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <Smartphone className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) =>
+                handleRatingChange("userExperience", value)
+              }
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate user experience (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -170,11 +213,17 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* Scalability Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="scalability" className="text-gray-300">Scalability</Label>
+          <Label htmlFor="scalability" className="text-gray-300">
+            Scalability
+          </Label>
           <div className="flex items-center space-x-2">
-            <Expand className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('scalability', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <Expand className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) =>
+                handleRatingChange("scalability", value)
+              }
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate scalability (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -190,11 +239,17 @@ const TeamEvaluationForm: React.FC = () => {
 
         {/* Demonstration Dropdown */}
         <div className="flex flex-col space-y-1">
-          <Label htmlFor="demonstration" className="text-gray-300">Demonstration</Label>
+          <Label htmlFor="demonstration" className="text-gray-300">
+            Demonstration
+          </Label>
           <div className="flex items-center space-x-2">
-            <CheckSquare className="w-5 h-5 text-gray-400" />
-            <Select onValueChange={(value) => handleRatingChange('demonstration', value)}>
-              <SelectTrigger className="w-full p-2 border rounded-lg bg-gray-800 border-gray-700 text-gray-300">
+            <CheckSquare className="h-5 w-5 text-gray-400" />
+            <Select
+              onValueChange={(value) =>
+                handleRatingChange("demonstration", value)
+              }
+            >
+              <SelectTrigger className="w-full rounded-lg border border-gray-700 bg-gray-800 p-2 text-gray-300">
                 <SelectValue placeholder="Rate demonstration (1-10)" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 text-gray-300">
@@ -214,7 +269,10 @@ const TeamEvaluationForm: React.FC = () => {
           whileTap={{ scale: 0.95 }}
           className="w-full"
         >
-          <Button type="submit" className="w-full p-2 bg-blue-600 text-white rounded-lg">
+          <Button
+            type="submit"
+            className="w-full rounded-lg bg-blue-600 p-2 text-white"
+          >
             Submit Evaluation
           </Button>
         </motion.div>
