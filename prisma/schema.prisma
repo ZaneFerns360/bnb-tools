@@ -26,16 +26,35 @@ model Post {
     @@index([name])
 }
 
-model Score {
-    id    String @id @default(uuid())
-    value Int?
-    team  Team?
-}
-
 model Council {
     id       String @id @default(uuid())
     name     String
     password String
+}
+
+model Score {
+    id              String @id @default(uuid())
+    team            Team?
+    design          Int
+    functionality   Int
+    innovation      Int
+    feasibilty      Int
+    user_experience Int
+    scalability     Int
+    demonstration   Int
+}
+
+model Food {
+    id         String @id @default(uuid())
+    team       Team?
+    breakfast1 Int    @default(0)
+    lunch1     Int    @default(0)
+    snack1     Int    @default(0)
+    dinner1    Int    @default(0)
+
+    breakfast2 Int @default(0)
+    lunch2     Int @default(0)
+    snack2     Int @default(0)
 }
 
 model Team {
@@ -45,9 +64,12 @@ model Team {
     member2 String?
     member3 String?
     member4 String?
+    number  Int     @default(2)
     domain  String?
     score   Score?  @relation(fields: [scoreId], references: [id])
     scoreId String? @unique
+    food    Food?   @relation(fields: [foodId], references: [id])
+    foodId  String? @unique
 }
 
 // Necessary for Next auth
