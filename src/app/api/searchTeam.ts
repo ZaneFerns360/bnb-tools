@@ -10,7 +10,6 @@ type TeamDetails = {
   member3: string | null;
   member4: string | null;
   domain: string | null;
-  scoreId: string | null;
   day1: JSONValue | null;
   day2: JSONValue | null;
 };
@@ -36,7 +35,6 @@ export async function getTeamDetailsByName(
         member3: team.member3,
         member4: team.member4,
         domain: team.domain,
-        scoreId: team.scoreId,
         day1: team.day1,
         day2: team.day2,
       }));

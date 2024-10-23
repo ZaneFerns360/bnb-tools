@@ -35,11 +35,14 @@ model Council {
 
 model Score {
     id              String @id @default(uuid())
-    team            Team?
+    team            Team   @relation(fields: [teamId], references: [id])
+    teamId          String
+    judge           String
+    round           Int
     design          Int
     functionality   Int
     innovation      Int
-    feasibilty      Int
+    feasibility     Int
     user_experience Int
     scalability     Int
     demonstration   Int
@@ -54,8 +57,7 @@ model Team {
     member4 String?
     number  Int     @default(2)
     domain  String?
-    score   Score?  @relation(fields: [scoreId], references: [id])
-    scoreId String? @unique
+    scores  Score[] // One-to-many relation with Score
     day1    Json?
     day2    Json?
 }
