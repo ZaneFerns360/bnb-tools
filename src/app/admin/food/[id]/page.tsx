@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="p-4">
+    <div className="flex h-screen items-center justify-center bg-gray-800 p-4">
       <FoodCheckin teamDetails={teamDetails} />
     </div>
   );

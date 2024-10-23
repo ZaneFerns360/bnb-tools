@@ -1,6 +1,7 @@
 "use server";
 import { db } from "~/server/db";
 import type * as client from "@prisma/client"; // Import Prisma to use InputJsonValue
+import { revalidatePath } from "next/cache";
 
 export async function changeDay1(
   teamId: string,
@@ -14,6 +15,7 @@ export async function changeDay1(
     });
 
     if (updatedTeam) {
+      revalidatePath("/admin");
       return updatedTeam; // Return updated team data
     } else {
       return null; // If no team is found, return null

@@ -4,11 +4,10 @@ import TeamEvaluationForm from "../../_components/Form";
 
 const page = () => {
   return (
-    <div className="flex h-screen items-center justify-center bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-gray-800 p-4">
       <TeamEvaluationForm />
     </div>
   );
 };
 
 export default page;
-
