@@ -1,6 +1,7 @@
 "use server";
 import { db } from "~/server/db";
 import { Team } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 type UpdateTeamInput = {
   id: string;
@@ -23,6 +24,7 @@ export async function updateTeam(input: UpdateTeamInput): Promise<Team | null> {
     });
 
     if (updatedTeam) {
+      revalidatePath(`/admin/${input.id}`);
       return updatedTeam;
     } else {
       console.error("Failed to update team.");

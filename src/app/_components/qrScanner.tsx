@@ -57,7 +57,9 @@ const QRScanner = () => {
           )}
         </div>
       ) : (
-        <Button onClick={() => setOpen(true)}>Open QR</Button>
+        <Button className="w-full" onClick={() => setOpen(true)}>
+          Open QR
+        </Button>
       )}
       {open && (
         <p className="mt-4 text-center text-sm text-gray-600">

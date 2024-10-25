@@ -191,6 +191,7 @@ const TeamEvaluationForm: React.FC<{ username: string }> = ({ username }) => {
       setError(null);
       const data = await getTeamDetailsByName(searchQuery);
       setTeams(data);
+      console.log(searchQuery, data);
       setOpen(true);
     } catch (error) {
       console.error("Error fetching teams:", error);
@@ -209,6 +210,7 @@ const TeamEvaluationForm: React.FC<{ username: string }> = ({ username }) => {
   };
 
   const handleTeamSelect = async (team: Team) => {
+    console.log(team);
     setSelectedTeam(team);
     setSearchQuery(team.name);
     setRatings((prev) => ({
@@ -253,7 +255,7 @@ const TeamEvaluationForm: React.FC<{ username: string }> = ({ username }) => {
               onClick={() => handleEditClick(roundData)}
               variant="outline"
               size="sm"
-              className="flex text-black items-center gap-2"
+              className="flex items-center gap-2 text-black"
             >
               <Edit2 className="h-4 w-4" />
               Edit
@@ -387,98 +389,98 @@ const TeamEvaluationForm: React.FC<{ username: string }> = ({ username }) => {
                 </button>
               </div>
             </PopoverTrigger>
-                <PopoverContent
-                  align="start"
-                  className="w-[var(--radix-popover-trigger-width)] border-gray-700 bg-gray-900/95 p-2 shadow-lg backdrop-blur-sm"
-                >
-                  <div className="max-h-[300px] overflow-y-auto rounded-lg">
-                    {teams?.length > 0 ? (
-                      <div className="space-y-2">
-                        {teams.map((team) => (
-                          <button
-                            key={team.id}
-                            onClick={() => handleTeamSelect(team)}
-                            className="group relative w-full transform rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-all duration-200 hover:border-purple-500/50 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          >
-                            <div className="flex items-center justify-between gap-4">
-                              <div className="flex-1 space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-3">
-                                    <div className="text-lg font-semibold text-white transition-colors group-hover:text-purple-400">
-                                      {team.name}
-                                    </div>
-                                    {team.domain && (
-                                      <span className="rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
-                                        {team.domain}
-                                      </span>
-                                    )}
-                                  </div>
+            <PopoverContent
+              align="start"
+              className="w-[var(--radix-popover-trigger-width)] border-gray-700 bg-gray-900/95 p-2 shadow-lg backdrop-blur-sm"
+            >
+              <div className="max-h-[300px] overflow-y-auto rounded-lg">
+                {teams?.length > 0 ? (
+                  <div className="space-y-2">
+                    {teams.map((team) => (
+                      <button
+                        key={team.id}
+                        onClick={() => handleTeamSelect(team)}
+                        className="group relative w-full transform rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-all duration-200 hover:border-purple-500/50 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex-1 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="text-lg font-semibold text-white transition-colors group-hover:text-purple-400">
+                                  {team.name}
                                 </div>
-
-                                <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex -space-x-2">
-                                    {[
-                                      team.member1,
-                                      team.member2,
-                                      team.member3,
-                                      team.member4,
-                                    ]
-                                      .filter(Boolean)
-                                      .slice(0, 2)
-                                      .map((member, idx) => (
-                                        <div
-                                          key={idx}
-                                          className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-800 bg-gray-700"
-                                        >
-                                          <span className="text-xs text-gray-300">
-                                            {member?.charAt(0)}
-                                          </span>
-                                        </div>
-                                      ))}
-                                    {(team.number || 0) > 2 && (
-                                      <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-800 bg-gray-700">
-                                        <span className="text-xs text-gray-300">
-                                          +{(team.number || 0) - 2}
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                  <span className="text-gray-400">
-                                    {team.number}{" "}
-                                    {team.number === 1 ? "member" : "members"}
+                                {team.domain && (
+                                  <span className="rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
+                                    {team.domain}
                                   </span>
-                                </div>
-                              </div>
-
-                              <div className="text-gray-400 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-purple-400">
-                                <ArrowRight className="h-5 w-5" />
+                                )}
                               </div>
                             </div>
-                          </button>
-                        ))}
+
+                            <div className="flex items-center gap-2 text-sm">
+                              <div className="flex -space-x-2">
+                                {[
+                                  team.member1,
+                                  team.member2,
+                                  team.member3,
+                                  team.member4,
+                                ]
+                                  .filter(Boolean)
+                                  .slice(0, 2)
+                                  .map((member, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-800 bg-gray-700"
+                                    >
+                                      <span className="text-xs text-gray-300">
+                                        {member?.charAt(0)}
+                                      </span>
+                                    </div>
+                                  ))}
+                                {(team.number || 0) > 2 && (
+                                  <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-800 bg-gray-700">
+                                    <span className="text-xs text-gray-300">
+                                      +{(team.number || 0) - 2}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                              <span className="text-gray-400">
+                                {team.number}{" "}
+                                {team.number === 1 ? "member" : "members"}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="text-gray-400 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-purple-400">
+                            <ArrowRight className="h-5 w-5" />
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    {error ? (
+                      <div className="text-red-400">
+                        <span className="mb-2 block text-3xl">⚠️</span>
+                        <p>{error}</p>
+                      </div>
+                    ) : searchQuery ? (
+                      <div className="text-gray-400">
+                        <span className="mb-2 block text-3xl">🔍</span>
+                        <p>No teams found</p>
                       </div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center py-8 text-center">
-                        {error ? (
-                          <div className="text-red-400">
-                            <span className="mb-2 block text-3xl">⚠️</span>
-                            <p>{error}</p>
-                          </div>
-                        ) : searchQuery ? (
-                          <div className="text-gray-400">
-                            <span className="mb-2 block text-3xl">🔍</span>
-                            <p>No teams found</p>
-                          </div>
-                        ) : (
-                          <div className="text-gray-400">
-                            <span className="mb-2 block text-3xl">⌨️</span>
-                            <p>Type to search teams</p>
-                          </div>
-                        )}
+                      <div className="text-gray-400">
+                        <span className="mb-2 block text-3xl">⌨️</span>
+                        <p>Type to search teams</p>
                       </div>
                     )}
                   </div>
-                </PopoverContent>
+                )}
+              </div>
+            </PopoverContent>
           </Popover>
         </div>
 
@@ -491,7 +493,7 @@ const TeamEvaluationForm: React.FC<{ username: string }> = ({ username }) => {
             <div className="space-y-1 text-sm text-gray-300">
               <p>Team ID: {selectedTeam.id}</p>
               <p>Domain: {selectedTeam.domain}</p>
-              <p>Members:</p>
+              <p>Members: {selectedTeam.number}</p>
               <ul className="ml-4 list-disc">
                 {selectedTeam.member1 && <li>{selectedTeam.member1}</li>}
                 {selectedTeam.member2 && <li>{selectedTeam.member2}</li>}

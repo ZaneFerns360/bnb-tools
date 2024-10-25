@@ -8,13 +8,16 @@ import {
   User,
   Briefcase,
   Medal,
+  CheckCircle,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import Link from "next/link";
+import { updateTeam } from "~/app/api/updateTeam";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const teamDetails = await getTeamDetails(params.id);
+  console.log(teamDetails?.checkin);
 
   if (!teamDetails) {
     return (
@@ -31,6 +34,14 @@ export default async function Page({ params }: { params: { id: string } }) {
     );
   }
 
+  async function handleCheckIn() {
+    "use server";
+    await updateTeam({
+      id: params.id,
+      checkin: !teamDetails?.checkin,
+    });
+  }
+
   const teamSections = [
     {
       title: "Team Information",
@@ -42,6 +53,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           label: "Domain",
           value: teamDetails.domain ?? "Not assigned",
           icon: Briefcase,
+        },
+        {
+          label: "Check-in Status",
+          value: teamDetails.checkin ? "Checked In" : "Not Checked In",
+          icon: CheckCircle,
         },
       ],
     },
@@ -85,6 +101,46 @@ export default async function Page({ params }: { params: { id: string } }) {
             Comprehensive information about the team and its members
           </p>
         </div>
+
+        {/* Check-in Status Card */}
+        <Card className="border-gray-700 bg-gray-900/50 shadow-lg backdrop-blur">
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="flex items-center gap-3">
+              <div
+                className={`rounded-full p-2 ${
+                  teamDetails.checkin
+                    ? "bg-green-500/20 text-green-400"
+                    : "bg-gray-700/50 text-gray-400"
+                }`}
+              >
+                <CheckCircle className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-200">
+                  Check-in Status
+                </h3>
+                <p className="text-sm text-gray-400">
+                  {teamDetails.checkin
+                    ? "Team is checked in"
+                    : "Team needs to check in"}
+                </p>
+              </div>
+            </div>
+            <form action={handleCheckIn}>
+              <Button
+                type="submit"
+                className={`flex items-center gap-2 ${
+                  teamDetails.checkin
+                    ? "bg-red-500 hover:bg-red-600"
+                    : "bg-green-500 hover:bg-green-600"
+                }`}
+              >
+                <CheckCircle className="h-4 w-4" />
+                {teamDetails.checkin ? "Check Out" : "Check In"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
         {/* Main Content */}
         <div className="grid gap-6 md:grid-cols-2">
