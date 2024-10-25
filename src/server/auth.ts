@@ -38,7 +38,7 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  theme: { logo: "/gdsc.webp" },
+  theme: { logo: "/gdsc.png" },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,

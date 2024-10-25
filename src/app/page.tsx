@@ -67,7 +67,7 @@ export default async function Home() {
             {(!isJudge || isVIP) && (
               <Link
                 href="/admin/"
-                className="flex transform items-center rounded-lg bg-gradient-to-r from-green-600 to-emerald-700 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-green-500/25"
+                className="flex transform items-center rounded-lg bg-gradient-to-r from-blue-600 to-emerald-700 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-500/25"
               >
                 Food Portal
               </Link>
@@ -75,7 +75,7 @@ export default async function Home() {
             {isVIP && (
               <Link
                 href="/admin/dashboard"
-                className="flex transform items-center rounded-lg bg-gradient-to-r from-green-600 to-emerald-700 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-green-500/25"
+                className="flex transform items-center rounded-lg bg-gradient-to-r from-blue-600 to-emerald-700 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-500/25"
               >
                 Dashboard
               </Link>
