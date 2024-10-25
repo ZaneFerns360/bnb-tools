@@ -15,7 +15,7 @@ export async function changeDay2(
     });
 
     if (updatedTeam) {
-      revalidatePath("/admin");
+      revalidatePath(`/admin/${teamId}`);
       return updatedTeam; // Return updated team data
     } else {
       return null; // If no team is found, return null

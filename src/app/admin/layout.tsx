@@ -14,7 +14,7 @@ export default async function Layout({
   }
 
   return (
-    <section>
+    <section className="bg-gray-800">
       <nav></nav>
       {children}
     </section>

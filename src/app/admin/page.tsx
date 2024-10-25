@@ -16,7 +16,7 @@ import { getTeamDetailsByName } from "../api/searchTeam";
 interface Team {
   id: string;
   name: string;
-  totalMembers?: number;
+  number?: number;
   member1: string | null;
   member2: string | null;
   member3: string | null;
@@ -130,40 +130,92 @@ const Page = () => {
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-[var(--radix-popover-trigger-width)] p-0"
+                  className="w-[var(--radix-popover-trigger-width)] border-gray-700 bg-gray-900/95 p-2 shadow-lg backdrop-blur-sm"
                 >
-                  <div className="max-h-[300px] overflow-y-auto">
+                  <div className="max-h-[300px] overflow-y-auto rounded-lg">
                     {teams?.length > 0 ? (
-                      teams.map((team) => (
-                        <button
-                          key={team.id}
-                          onClick={() => handleTeamSelect(team)}
-                          className="w-full border-b border-gray-700 bg-gray-700 p-3 text-left hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium text-white">
-                                {team.name}
+                      <div className="space-y-2">
+                        {teams.map((team) => (
+                          <button
+                            key={team.id}
+                            onClick={() => handleTeamSelect(team)}
+                            className="group relative w-full transform rounded-lg border border-gray-700 bg-gray-800 p-4 text-left transition-all duration-200 hover:border-purple-500/50 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          >
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex-1 space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <div className="text-lg font-semibold text-white transition-colors group-hover:text-purple-400">
+                                      {team.name}
+                                    </div>
+                                    {team.domain && (
+                                      <span className="rounded-full border border-purple-500/20 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
+                                        {team.domain}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-2 text-sm">
+                                  <div className="flex -space-x-2">
+                                    {[
+                                      team.member1,
+                                      team.member2,
+                                      team.member3,
+                                      team.member4,
+                                    ]
+                                      .filter(Boolean)
+                                      .slice(0, 2)
+                                      .map((member, idx) => (
+                                        <div
+                                          key={idx}
+                                          className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-800 bg-gray-700"
+                                        >
+                                          <span className="text-xs text-gray-300">
+                                            {member?.charAt(0)}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    {(team.number || 0) > 2 && (
+                                      <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-800 bg-gray-700">
+                                        <span className="text-xs text-gray-300">
+                                          +{(team.number || 0) - 2}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <span className="text-gray-400">
+                                    {team.number}{" "}
+                                    {team.number === 1 ? "member" : "members"}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="text-white">{team.member1}</div>
-                              <div className="text-sm text-gray-400">
-                                {team.totalMembers} members
+
+                              <div className="text-gray-400 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-purple-400">
+                                <ArrowRight className="h-5 w-5" />
                               </div>
                             </div>
-                            {team.domain && (
-                              <span className="text-sm text-gray-400">
-                                {team.domain}
-                              </span>
-                            )}
-                          </div>
-                        </button>
-                      ))
+                          </button>
+                        ))}
+                      </div>
                     ) : (
-                      <div className="p-3 text-center text-sm text-gray-400">
-                        {error ||
-                          (searchQuery
-                            ? "No teams found"
-                            : "Type to search teams")}
+                      <div className="flex flex-col items-center justify-center py-8 text-center">
+                        {error ? (
+                          <div className="text-red-400">
+                            <span className="mb-2 block text-3xl">⚠️</span>
+                            <p>{error}</p>
+                          </div>
+                        ) : searchQuery ? (
+                          <div className="text-gray-400">
+                            <span className="mb-2 block text-3xl">🔍</span>
+                            <p>No teams found</p>
+                          </div>
+                        ) : (
+                          <div className="text-gray-400">
+                            <span className="mb-2 block text-3xl">⌨️</span>
+                            <p>Type to search teams</p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

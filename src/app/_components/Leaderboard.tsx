@@ -1,6 +1,4 @@
-
-'use client'
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -9,203 +7,157 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
-interface LeaderboardProps {
-  data: {
-    teamName: string;
-    teamLeader: string;
-    design: string;
-    functionality: string;
-    innovation: string;
-    feasibility: string;
-    userExperience: string;
-    scalability: string;
-    demonstration: string;
-    total: string;
-  }[];
-}
+const Leaderboard = ({ data, value }) => {
+  const scoreCategories = [
+    { key: "design", icon: "🎨", label: "Design", maxScore: 10 },
+    { key: "functionality", icon: "⚙", label: "Functionality", maxScore: 10 },
+    { key: "innovation", icon: "💡", label: "Innovation", maxScore: 10 },
+    { key: "feasibility", icon: "📈", label: "Feasibility", maxScore: 10 },
+    { key: "user_experience", icon: "📱", label: "UX", maxScore: 10 },
+    { key: "scalability", icon: "🔧", label: "Scalability", maxScore: 10 },
+    { key: "demonstration", icon: "✔", label: "Demo", maxScore: 10 },
+  ];
 
-const Leaderboard: React.FC<LeaderboardProps> = ({ data = [] }) => {
+  // Calculate total score for a team
+  const calculateTotal = (scores) => {
+    if (!scores?.[value]) return 0;
+    return scoreCategories.reduce((total, category) => {
+      const score = scores[value]?.[category.key] || 0;
+      return total + score;
+    }, 0);
+  };
+
+  // Sort and calculate teams with their totals
+  const sortedTeams = useMemo(() => {
+    return [...data]
+      .map((team) => ({
+        ...team,
+        totalScore: calculateTotal(team.scores),
+      }))
+      .sort((a, b) => b.totalScore - a.totalScore);
+  }, [data, value]);
+
+  // Calculate maximum possible score
+  const maxPossibleScore = scoreCategories.reduce(
+    (total, category) => total + category.maxScore,
+    0,
+  );
+
   return (
-    <div className="mx-auto max-w-full rounded-lg bg-gray-700 p-2 shadow-lg sm:p-4 md:max-w-7xl md:p-6">
-      <h1 className="mb-4 text-center text-2xl font-bold text-gray-200 sm:text-3xl md:mb-8 md:text-4xl">
-        Leaderboard
-      </h1>
-      <div className="relative overflow-x-auto rounded-lg">
-        <div className="min-w-[1000px]">
-          <Table className="w-full rounded-lg bg-gray-900 shadow-lg">
-            <TableHeader className="bg-gray-800">
-              <TableRow>
-                <TableHead className="sticky left-0 z-20 w-12 bg-gray-800 px-2 py-2 text-left text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  #
-                </TableHead>
-                <TableHead className="sticky left-12 z-20 min-w-[120px] bg-gray-800 px-2 py-2 text-left text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  Team Name
-                </TableHead>
-                <TableHead className="min-w-[120px] px-2 py-2 text-left text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  Team Leader
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  🎨 Design
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  ⚙ Functionality
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  💡 Innovation
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  📈 Feasibility
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  📱 User Experience
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  🔧 Scalability
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  ✔ Demonstration
-                </TableHead>
-                <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-                  🏆 Total
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="text-gray-300">
-              {data.map((team, index) => (
-                <TableRow
-                  key={index}
-                  className="border-b border-gray-700 transition-colors duration-200 hover:bg-gray-800"
-                >
-                  <TableCell className="sticky left-0 z-20 bg-gray-900 px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="sticky left-12 z-20 bg-gray-900 px-2 py-2 text-left text-sm font-medium md:px-4 md:py-3 md:text-base">
-                    {team.teamName}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-left text-sm md:px-4 md:py-3 md:text-base">
-                    {team.teamLeader}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.design}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.functionality}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.innovation}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.feasibility}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.userExperience}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.scalability}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm md:px-4 md:py-3 md:text-base">
-                    {team.demonstration}
-                  </TableCell>
-                  <TableCell className="px-2 py-2 text-center text-sm font-bold md:px-4 md:py-3 md:text-base">
-                    {team.total}
-                  </TableCell>
+    <Card className="mx-auto max-w-[95vw] border-none bg-gray-900 backdrop-blur-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-center text-2xl font-bold text-gray-100 md:text-3xl lg:text-4xl">
+          Leaderboard
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-2 sm:p-4">
+        <ScrollArea className="rounded-lg border border-gray-700">
+          <div className="min-w-[700px]">
+            <Table>
+              <TableHeader className="bg-gray-800/80">
+                <TableRow>
+                  <TableHead className="sticky left-0 z-20 w-12 bg-gray-800/80 text-gray-200">
+                    Rank
+                  </TableHead>
+                  <TableHead className="sticky left-12 z-20 min-w-[180px] bg-gray-800/80 text-gray-200">
+                    Team
+                  </TableHead>
+                  <TableHead className="min-w-[150px] text-gray-200">
+                    Leader
+                  </TableHead>
+                  {scoreCategories.map(({ icon, label, maxScore }) => (
+                    <TableHead
+                      key={label}
+                      className="text-center text-gray-200"
+                    >
+                      <div className="hidden flex-col md:flex">
+                        <span>
+                          {icon} {label}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          /{maxScore}
+                        </span>
+                      </div>
+                      <span className="md:hidden">{icon}</span>
+                    </TableHead>
+                  ))}
+                  <TableHead className="text-center font-bold text-gray-200">
+                    <div className="flex flex-col">
+                      <span>Total</span>
+                      <span className="text-xs text-gray-400">
+                        /{maxPossibleScore}
+                      </span>
+                    </div>
+                  </TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-    </div>
+              </TableHeader>
+              <TableBody>
+                {sortedTeams.map((team, index) => (
+                  <TableRow
+                    key={team.id}
+                    className={`group border-b border-gray-700 transition-colors hover:bg-gray-800/50 ${
+                      index === 0
+                        ? "bg-yellow-500/10"
+                        : index === 1
+                          ? "bg-gray-400/10"
+                          : index === 2
+                            ? "bg-orange-700/10"
+                            : ""
+                    }`}
+                  >
+                    <TableCell className="sticky left-0 z-20 bg-gray-900/90 text-center font-medium text-gray-300 group-hover:bg-gray-800/90">
+                      <div className="flex items-center justify-center">
+                        {index === 0
+                          ? "🥇"
+                          : index === 1
+                            ? "🥈"
+                            : index === 2
+                              ? "🥉"
+                              : index + 1}
+                      </div>
+                    </TableCell>
+                    <TableCell className="sticky left-12 z-20 bg-gray-900/90 font-medium text-gray-200 group-hover:bg-gray-800/90">
+                      {team.name}
+                    </TableCell>
+                    <TableCell className="text-gray-300">
+                      {team.member1}
+                    </TableCell>
+                    {scoreCategories.map(({ key }) => (
+                      <TableCell
+                        key={key}
+                        className="text-center text-gray-300"
+                      >
+                        {team?.scores[value]?.[key] || "-"}
+                      </TableCell>
+                    ))}
+                    <TableCell className="text-center font-bold">
+                      <span
+                        className={` ${
+                          team.totalScore === maxPossibleScore
+                            ? "text-yellow-400"
+                            : team.totalScore >= maxPossibleScore * 0.8
+                              ? "text-emerald-400"
+                              : team.totalScore >= maxPossibleScore * 0.6
+                                ? "text-blue-400"
+                                : "text-gray-300"
+                        } `}
+                      >
+                        {team.totalScore}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </CardContent>
+    </Card>
   );
 };
 
- export default Leaderboard;
-
-
-
-
-
-
-
-
-
-
-
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "~/components/ui/table";
-
-// interface LeaderboardProps {
-//   data: {
-//     teamName: string;
-//     teamLeader: string;
-//     design: string;
-//     functionality: string;
-//     innovation: string;
-//     feasibility: string;
-//     userExperience: string;
-//     scalability: string;
-//     demonstration: string;
-//     total: string;
-//   }[];
-// }
-
-//   return (
-//     <div className="mx-auto max-w-full rounded-lg bg-gray-700 p-2 shadow-lg sm:p-4 md:max-w-7xl md:p-6">
-//       <div className="relative overflow-x-auto rounded-lg">
-//         <div className="min-w-[1000px]">
-//           <Table className="w-full rounded-lg bg-gray-900 shadow-lg">
-//             <TableHeader className="bg-gray-800">
-//               <TableRow>
-//                 <TableHead className="sticky left-0 z-20 w-12 bg-gray-800 px-2 py-2 text-left text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   #
-//                 </TableHead>
-//                 <TableHead className="sticky left-12 z-20 min-w-[120px] bg-gray-800 px-2 py-2 text-left text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   Team Name
-//                 </TableHead>
-//                 <TableHead className="min-w-[120px] px-2 py-2 text-left text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   Team Leader
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   🎨 Design
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   ⚙ Functionality
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   💡 Innovation
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   📈 Feasibility
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   📱 User Experience
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   🔧 Scalability
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   ✔ Demonstration
-//                 </TableHead>
-//                 <TableHead className="w-20 px-2 py-2 text-center text-sm font-semibold text-gray-300 md:px-4 md:py-3 md:text-base">
-//                   🏆 Total
-//                 </TableHead>
-//               </TableRow>
-//             </TableHeader>
-            
-//           </Table>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-
-
-
+export default Leaderboard;
