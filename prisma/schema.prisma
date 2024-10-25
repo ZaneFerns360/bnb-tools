@@ -56,6 +56,9 @@ model Team {
     member3 String?
     member4 String?
     number  Int     @default(2)
+    checkin Boolean @default(false)
+    ps      Int?
+    room    String?
     domain  String?
     scores  Score[] // One-to-many relation with Score
     day1    Json?
