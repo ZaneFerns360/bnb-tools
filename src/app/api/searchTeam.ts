@@ -21,7 +21,9 @@ export async function getTeamDetailsByName(
     const teams = await db.team.findMany({
       where: {
         name: {
-          search: name, // Full-text search for team name
+          contains: name,
+          mode: "insensitive",
+          // Full-text search for team name
         },
       },
     });

@@ -38,6 +38,7 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  theme: { logo: "/gdsc.webp" },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -59,12 +60,12 @@ export const authOptions: NextAuthOptions = {
         username: {
           label: "Username",
           type: "text",
-          placeholder: "Sexy-Shaun",
+          placeholder: "Shaun",
         },
         password: {
           label: "Password",
           type: "password",
-          placeholder: "Bhavde-123",
+          placeholder: "shaun123",
         },
       },
       async authorize(credentials) {
