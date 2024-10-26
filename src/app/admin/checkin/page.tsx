@@ -1,3 +1,4 @@
+"use server";
 import TeamsOverview from "~/app/_components/checkin_status";
 import { getAllTeamDetails } from "~/app/api/allTeamDetails";
 
