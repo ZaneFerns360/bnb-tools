@@ -69,7 +69,16 @@ export default async function Home() {
                 href="/admin/"
                 className="flex transform items-center rounded-lg bg-gradient-to-r from-blue-600 to-emerald-700 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-500/25"
               >
-                Food Portal
+                Managing Portal
+              </Link>
+            )}
+
+            {(!isJudge || isVIP) && (
+              <Link
+                href="/admin/checkin"
+                className="flex transform items-center rounded-lg bg-gradient-to-r from-blue-600 to-emerald-700 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-500/25"
+              >
+                Check In
               </Link>
             )}
             {isVIP && (
