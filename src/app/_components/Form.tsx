@@ -184,6 +184,7 @@ const TeamEvaluationForm: React.FC<{ username: string }> = ({ username }) => {
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
       setTeams([]);
+      setIsEditing(false)
       return;
     }
     try {

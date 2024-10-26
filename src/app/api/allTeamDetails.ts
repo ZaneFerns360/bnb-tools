@@ -11,6 +11,7 @@ type TeamDetails = {
   member3: string | null;
   member4: string | null;
   domain: string | null;
+  checkin:boolean;
   number:number;
   scores: Score[]; // Include scores in the TeamDetails type
 };
@@ -32,6 +33,7 @@ export async function getAllTeamDetails(): Promise<TeamDetails[]> {
       member4: team.member4,
       number:team.number,
       domain: team.domain,
+      checkin:team.checkin,
       scores: team.scores, // Add scores to the return object
     }));
   } catch (error) {
