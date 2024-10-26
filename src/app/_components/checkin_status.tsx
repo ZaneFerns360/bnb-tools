@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { Search, Users, CheckCircle2, XCircle } from "lucide-react";
+import { Search, Users, CheckCircle2, XCircle, User } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { updateTeam } from "../api/updateTeam";
 
@@ -22,9 +22,9 @@ const TeamsOverview = ({ teams }) => {
   );
 
   const getTeamMembers = (team) => {
-    return [team.member1, team.member2, team.member3, team.member4]
-      .filter(Boolean)
-      .join(", ");
+    return [team.member1, team.member2, team.member3, team.member4].filter(
+      Boolean,
+    );
   };
 
   const handleCheckIn = async (team) => {
@@ -60,7 +60,7 @@ const TeamsOverview = ({ teams }) => {
               {filteredTeams.map((team) => (
                 <Card key={team.id} className="border-gray-700 bg-gray-900">
                   <CardContent className="p-4">
-                    <div className="mb-2 flex items-center justify-between">
+                    <div className="mb-4 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Users className="h-5 w-5 text-blue-400" />
                         <h3 className="font-semibold text-white">
@@ -73,17 +73,31 @@ const TeamsOverview = ({ teams }) => {
                     </div>
 
                     <div className="space-y-2 text-sm text-gray-300">
-                      <p className="line-clamp-1">
-                        <span className="text-gray-400">Members:</span>{" "}
-                        {getTeamMembers(team)}
-                      </p>
+                      <div className="space-y-2">
+                        <span className="text-gray-400">Team Members:</span>
+                        <div className="grid grid-cols-2 gap-2">
+                          {getTeamMembers(team).map((member, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2 rounded-lg bg-gray-800 p-2"
+                            >
+                              <User className="h-4 w-4 text-blue-400" />
+                              <span className="truncate">{member}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
                       {team.domain && (
-                        <p className="line-clamp-1">
+                        <p className="mt-3">
                           <span className="text-gray-400">Domain:</span>{" "}
-                          {team.domain}
+                          <span className="rounded-md bg-gray-800 px-2 py-1">
+                            {team.domain}
+                          </span>
                         </p>
                       )}
-                      <div className="mt-4 flex items-center justify-between">
+
+                      <div className="mt-4 flex items-center justify-between border-t border-gray-700 pt-3">
                         <div className="flex items-center gap-2">
                           <span className="text-gray-400">Status:</span>
                           {team.checkin ? (
