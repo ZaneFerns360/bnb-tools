@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useMemo, useEffect, useState } from "react";
 import { getAllTeamDetailsPlus } from "~/app/api/averageAllDetails"; // Adjust path as needed
 import {
@@ -11,9 +11,10 @@ import {
 } from "~/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import * as Switch from "@radix-ui/react-switch";
 
 type TeamDetails = {
-  id: string; // Updated to match the server-side type
+  id: string;
   name: string;
   member1: string | null;
   scores: Record<string, Record<string, number>>;
@@ -24,6 +25,8 @@ type TeamDetails = {
 
 const Leaderboard = ({ value }: { value: string }) => {
   const [data, setData] = useState<TeamDetails[]>([]);
+  const [sortByTotalAvg, setSortByTotalAvg] = useState(false);
+
   const scoreCategories = [
     { key: "design", icon: "🎨", label: "Design", maxScore: 10 },
     { key: "functionality", icon: "⚙", label: "Functionality", maxScore: 10 },
@@ -56,8 +59,12 @@ const Leaderboard = ({ value }: { value: string }) => {
         ...team,
         totalScore: calculateTotal(team.scores),
       }))
-      .sort((a, b) => b.totalScore - a.totalScore);
-  }, [data, value]);
+      .sort((a, b) =>
+        sortByTotalAvg
+          ? (b.totalAvg ?? 0) - (a.totalAvg ?? 0)
+          : b.totalScore - a.totalScore,
+      );
+  }, [data, value, sortByTotalAvg]);
 
   const maxPossibleScore = scoreCategories.reduce(
     (total, category) => total + category.maxScore,
@@ -66,10 +73,23 @@ const Leaderboard = ({ value }: { value: string }) => {
 
   return (
     <Card className="mx-auto max-w-[95vw] border-none bg-gray-900 backdrop-blur-sm">
-      <CardHeader className="pb-2">
+      <CardHeader className="flex flex-col items-center pb-2">
         <CardTitle className="text-center text-2xl font-bold text-gray-100 md:text-3xl lg:text-4xl">
           Leaderboard
         </CardTitle>
+        <div className="mt-2 flex items-center space-x-2">
+          <label htmlFor="toggle-sort" className="text-gray-200">
+            Sort by Total Average
+          </label>
+          <Switch.Root
+            id="toggle-sort"
+            className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-600 transition-colors duration-200 ease-in-out focus:outline-none"
+            checked={sortByTotalAvg}
+            onCheckedChange={setSortByTotalAvg}
+          >
+            <Switch.Thumb className="inline-block h-5 w-5 translate-x-0.5 transform rounded-full bg-white transition duration-200 ease-in-out data-[state=checked]:translate-x-[20px]" />
+          </Switch.Root>
+        </div>
       </CardHeader>
       <CardContent className="p-2 sm:p-4">
         <ScrollArea className="rounded-lg border border-gray-700">
@@ -77,14 +97,27 @@ const Leaderboard = ({ value }: { value: string }) => {
             <Table>
               <TableHeader className="bg-gray-800/80">
                 <TableRow>
-                  <TableHead className="sticky left-0 z-20 w-12 bg-gray-800/80 text-gray-200">Rank</TableHead>
-                  <TableHead className="sticky left-12 z-20 min-w-[180px] bg-gray-800/80 text-gray-200">Team</TableHead>
-                  <TableHead className="min-w-[150px] text-gray-200">Leader</TableHead>
+                  <TableHead className="sticky left-0 z-20 w-12 bg-gray-800/80 text-gray-200">
+                    Rank
+                  </TableHead>
+                  <TableHead className="sticky left-12 z-20 min-w-[180px] bg-gray-800/80 text-gray-200">
+                    Team
+                  </TableHead>
+                  <TableHead className="min-w-[150px] text-gray-200">
+                    Leader
+                  </TableHead>
                   {scoreCategories.map(({ icon, label, maxScore }) => (
-                    <TableHead key={label} className="text-center text-gray-200">
+                    <TableHead
+                      key={label}
+                      className="text-center text-gray-200"
+                    >
                       <div className="hidden flex-col md:flex">
-                        <span>{icon} {label}</span>
-                        <span className="text-xs text-gray-400">/{maxScore}</span>
+                        <span>
+                          {icon} {label}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          /{maxScore}
+                        </span>
                       </div>
                       <span className="md:hidden">{icon}</span>
                     </TableHead>
@@ -92,7 +125,9 @@ const Leaderboard = ({ value }: { value: string }) => {
                   <TableHead className="text-center font-bold text-gray-200">
                     <div className="flex flex-col">
                       <span>Total</span>
-                      <span className="text-xs text-gray-400">/{maxPossibleScore}</span>
+                      <span className="text-xs text-gray-400">
+                        /{maxPossibleScore}
+                      </span>
                     </div>
                   </TableHead>
                   <TableHead className="text-center font-bold text-gray-200">
@@ -120,15 +155,21 @@ const Leaderboard = ({ value }: { value: string }) => {
                       index === 0
                         ? "bg-yellow-500/10"
                         : index === 1
-                        ? "bg-gray-400/10"
-                        : index === 2
-                        ? "bg-orange-700/10"
-                        : ""
+                          ? "bg-gray-400/10"
+                          : index === 2
+                            ? "bg-orange-700/10"
+                            : ""
                     }`}
                   >
                     <TableCell className="sticky left-0 z-20 bg-gray-900/90 text-center font-medium text-gray-300 group-hover:bg-gray-800/90">
                       <div className="flex items-center justify-center">
-                        {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
+                        {index === 0
+                          ? "🥇"
+                          : index === 1
+                            ? "🥈"
+                            : index === 2
+                              ? "🥉"
+                              : index + 1}
                       </div>
                     </TableCell>
                     <TableCell className="sticky left-12 z-20 bg-gray-900/90 font-medium text-gray-200 group-hover:bg-gray-800/90">
@@ -138,7 +179,10 @@ const Leaderboard = ({ value }: { value: string }) => {
                       {team.member1}
                     </TableCell>
                     {scoreCategories.map(({ key }) => (
-                      <TableCell key={key} className="text-center text-gray-300">
+                      <TableCell
+                        key={key}
+                        className="text-center text-gray-300"
+                      >
                         {team.scores[value]?.[key] || 0}
                       </TableCell>
                     ))}
@@ -146,13 +190,19 @@ const Leaderboard = ({ value }: { value: string }) => {
                       {team.totalScore}
                     </TableCell>
                     <TableCell className="text-center text-gray-300">
-                      {team.round1Avg !== null ? team.round1Avg.toFixed(2) : "N/A"}
+                      {team.round1Avg !== null
+                        ? team.round1Avg.toFixed(2)
+                        : "N/A"}
                     </TableCell>
                     <TableCell className="text-center text-gray-300">
-                      {team.round2Avg !== null ? team.round2Avg.toFixed(2) : "N/A"}
+                      {team.round2Avg !== null
+                        ? team.round2Avg.toFixed(2)
+                        : "N/A"}
                     </TableCell>
                     <TableCell className="text-center text-gray-300">
-                      {team.totalAvg !== null ? team.totalAvg.toFixed(2) : "N/A"}
+                      {team.totalAvg !== null
+                        ? team.totalAvg.toFixed(2)
+                        : "N/A"}
                     </TableCell>
                   </TableRow>
                 ))}
