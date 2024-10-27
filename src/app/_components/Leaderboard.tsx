@@ -1,4 +1,6 @@
-import React, { useMemo } from "react";
+'use client';
+import React, { useMemo, useEffect, useState } from "react";
+import { getAllTeamDetailsPlus } from "~/app/api/averageAllDetails"; // Adjust path as needed
 import {
   Table,
   TableBody,
@@ -10,7 +12,18 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
-const Leaderboard = ({ data, value }) => {
+type TeamDetails = {
+  id: string; // Updated to match the server-side type
+  name: string;
+  member1: string | null;
+  scores: Record<string, Record<string, number>>;
+  round1Avg: number | null;
+  round2Avg: number | null;
+  totalAvg: number | null;
+};
+
+const Leaderboard = ({ value }: { value: string }) => {
+  const [data, setData] = useState<TeamDetails[]>([]);
   const scoreCategories = [
     { key: "design", icon: "🎨", label: "Design", maxScore: 10 },
     { key: "functionality", icon: "⚙", label: "Functionality", maxScore: 10 },
@@ -21,8 +34,15 @@ const Leaderboard = ({ data, value }) => {
     { key: "demonstration", icon: "✔", label: "Demo", maxScore: 10 },
   ];
 
-  // Calculate total score for a team
-  const calculateTotal = (scores) => {
+  useEffect(() => {
+    async function fetchData() {
+      const teamsData = await getAllTeamDetailsPlus();
+      setData(teamsData);
+    }
+    fetchData();
+  }, []);
+
+  const calculateTotal = (scores: Record<string, Record<string, number>>) => {
     if (!scores?.[value]) return 0;
     return scoreCategories.reduce((total, category) => {
       const score = scores[value]?.[category.key] || 0;
@@ -30,7 +50,6 @@ const Leaderboard = ({ data, value }) => {
     }, 0);
   };
 
-  // Sort and calculate teams with their totals
   const sortedTeams = useMemo(() => {
     return [...data]
       .map((team) => ({
@@ -40,7 +59,6 @@ const Leaderboard = ({ data, value }) => {
       .sort((a, b) => b.totalScore - a.totalScore);
   }, [data, value]);
 
-  // Calculate maximum possible score
   const maxPossibleScore = scoreCategories.reduce(
     (total, category) => total + category.maxScore,
     0,
@@ -59,27 +77,14 @@ const Leaderboard = ({ data, value }) => {
             <Table>
               <TableHeader className="bg-gray-800/80">
                 <TableRow>
-                  <TableHead className="sticky left-0 z-20 w-12 bg-gray-800/80 text-gray-200">
-                    Rank
-                  </TableHead>
-                  <TableHead className="sticky left-12 z-20 min-w-[180px] bg-gray-800/80 text-gray-200">
-                    Team
-                  </TableHead>
-                  <TableHead className="min-w-[150px] text-gray-200">
-                    Leader
-                  </TableHead>
+                  <TableHead className="sticky left-0 z-20 w-12 bg-gray-800/80 text-gray-200">Rank</TableHead>
+                  <TableHead className="sticky left-12 z-20 min-w-[180px] bg-gray-800/80 text-gray-200">Team</TableHead>
+                  <TableHead className="min-w-[150px] text-gray-200">Leader</TableHead>
                   {scoreCategories.map(({ icon, label, maxScore }) => (
-                    <TableHead
-                      key={label}
-                      className="text-center text-gray-200"
-                    >
+                    <TableHead key={label} className="text-center text-gray-200">
                       <div className="hidden flex-col md:flex">
-                        <span>
-                          {icon} {label}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          /{maxScore}
-                        </span>
+                        <span>{icon} {label}</span>
+                        <span className="text-xs text-gray-400">/{maxScore}</span>
                       </div>
                       <span className="md:hidden">{icon}</span>
                     </TableHead>
@@ -87,9 +92,22 @@ const Leaderboard = ({ data, value }) => {
                   <TableHead className="text-center font-bold text-gray-200">
                     <div className="flex flex-col">
                       <span>Total</span>
-                      <span className="text-xs text-gray-400">
-                        /{maxPossibleScore}
-                      </span>
+                      <span className="text-xs text-gray-400">/{maxPossibleScore}</span>
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-center font-bold text-gray-200">
+                    <div className="flex flex-col">
+                      <span>Round 1 Avg</span>
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-center font-bold text-gray-200">
+                    <div className="flex flex-col">
+                      <span>Round 2 Avg</span>
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-center font-bold text-gray-200">
+                    <div className="flex flex-col">
+                      <span>Total Avg</span>
                     </div>
                   </TableHead>
                 </TableRow>
@@ -102,21 +120,15 @@ const Leaderboard = ({ data, value }) => {
                       index === 0
                         ? "bg-yellow-500/10"
                         : index === 1
-                          ? "bg-gray-400/10"
-                          : index === 2
-                            ? "bg-orange-700/10"
-                            : ""
+                        ? "bg-gray-400/10"
+                        : index === 2
+                        ? "bg-orange-700/10"
+                        : ""
                     }`}
                   >
                     <TableCell className="sticky left-0 z-20 bg-gray-900/90 text-center font-medium text-gray-300 group-hover:bg-gray-800/90">
                       <div className="flex items-center justify-center">
-                        {index === 0
-                          ? "🥇"
-                          : index === 1
-                            ? "🥈"
-                            : index === 2
-                              ? "🥉"
-                              : index + 1}
+                        {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
                       </div>
                     </TableCell>
                     <TableCell className="sticky left-12 z-20 bg-gray-900/90 font-medium text-gray-200 group-hover:bg-gray-800/90">
@@ -126,27 +138,21 @@ const Leaderboard = ({ data, value }) => {
                       {team.member1}
                     </TableCell>
                     {scoreCategories.map(({ key }) => (
-                      <TableCell
-                        key={key}
-                        className="text-center text-gray-300"
-                      >
-                        {team?.scores[value]?.[key] || "-"}
+                      <TableCell key={key} className="text-center text-gray-300">
+                        {team.scores[value]?.[key] || 0}
                       </TableCell>
                     ))}
-                    <TableCell className="text-center font-bold">
-                      <span
-                        className={` ${
-                          team.totalScore === maxPossibleScore
-                            ? "text-yellow-400"
-                            : team.totalScore >= maxPossibleScore * 0.8
-                              ? "text-emerald-400"
-                              : team.totalScore >= maxPossibleScore * 0.6
-                                ? "text-blue-400"
-                                : "text-gray-300"
-                        } `}
-                      >
-                        {team.totalScore}
-                      </span>
+                    <TableCell className="text-center text-gray-300">
+                      {team.totalScore}
+                    </TableCell>
+                    <TableCell className="text-center text-gray-300">
+                      {team.round1Avg !== null ? team.round1Avg.toFixed(2) : "N/A"}
+                    </TableCell>
+                    <TableCell className="text-center text-gray-300">
+                      {team.round2Avg !== null ? team.round2Avg.toFixed(2) : "N/A"}
+                    </TableCell>
+                    <TableCell className="text-center text-gray-300">
+                      {team.totalAvg !== null ? team.totalAvg.toFixed(2) : "N/A"}
                     </TableCell>
                   </TableRow>
                 ))}
